@@ -45,13 +45,12 @@ def make_alerta_action(ALERT_ID, ALERT_ACTION, ALERT_ACTION_TIME, COMMENT):
             "text": COMMENT
         }
 
-
     requests.put(ALERTA_API_URL, json=alerta_action, headers=headers)
 
 
 def return_response_to_slack(SLACK_RESPONSE_URL, SLACK_USER, ALERT_TEXT, ALERT_ACTION, ALERT_ACTION_TIME, COMMENT):
 
-    time_values = {"3600": "1 hour", "7200": "2 hours", "14400": "4 hours", "28800": "8 hours",
+    time_values = {"300": "5 mins", "900": "15 mins", "1800": "30 mins", "3600": "1 hour", "7200": "2 hours", "14400": "4 hours", "28800": "8 hours",
                    "86400": "1 day", "604800": "1 week"}
     response_body = {
         "text": f"Thank you for the response, {SLACK_USER}",
@@ -75,6 +74,18 @@ def return_response_to_slack(SLACK_RESPONSE_URL, SLACK_USER, ALERT_TEXT, ALERT_A
 def make_dialog_for_ack(SLACK_TRIGGER_ID, ALERT_ID, SLACK_USER, ALERT_TEXT):
 
     ack_options = [
+        {
+            "label": "Ack for 5 mins",
+            "value": "ack|300"
+        },
+        {
+            "label": "Ack for 15 mins",
+            "value": "ack|900"
+        },
+        {
+            "label": "Ack for 30 mins",
+            "value": "ack|1800"
+        },
         {
             "label": "Ack for 1 hour",
             "value": "ack|3600"
@@ -188,4 +199,3 @@ def manage_alerta():
 if __name__ == '__main__':
     port = int(BOT_PORT)
     app.run(port=port, host='0.0.0.0')
-
